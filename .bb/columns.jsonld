@@ -1,0 +1,102 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "cheminf": "http://semanticscience.org/resource/",
+    "obo": "http://purl.obolibrary.org/obo/",
+    "bao": "http://www.bioassayontology.org/bao#"
+  },
+  "columns": [
+    {
+      "name": "smiles",
+      "@type": "cheminf:CHEMINF_000018",
+      "description": "Ligand SMILES",
+      "dataType": "string"
+    },
+    {
+      "name": "inchi",
+      "@type": "cheminf:CHEMINF_000113",
+      "description": "Ligand InChI",
+      "dataType": "string"
+    },
+    {
+      "name": "inchikey",
+      "@type": "cheminf:CHEMINF_000059",
+      "description": "Ligand InChI Key",
+      "dataType": "string"
+    },
+    {
+      "name": "target_name",
+      "description": "Name of the target protein",
+      "dataType": "string"
+    },
+    {
+      "name": "target_sequence",
+      "description": "Amino acid sequence of the target",
+      "dataType": "string"
+    },
+    {
+      "name": "ki_nm",
+      "description": "Ki binding affinity",
+      "unitCode": "nM",
+      "dataType": "float"
+    },
+    {
+      "name": "ic50_nm",
+      "@type": "obo:OBI_0001173",
+      "description": "IC50 binding affinity",
+      "unitCode": "nM",
+      "dataType": "float"
+    },
+    {
+      "name": "kd_nm",
+      "description": "Kd dissociation constant",
+      "unitCode": "nM",
+      "dataType": "float"
+    },
+    {
+      "name": "ec50_nm",
+      "@type": "obo:OBI_0001174",
+      "description": "EC50 effective concentration",
+      "unitCode": "nM",
+      "dataType": "float"
+    },
+    {
+      "name": "kon",
+      "description": "Association rate constant (Kon)",
+      "unitCode": "1/Ms",
+      "dataType": "float"
+    },
+    {
+      "name": "koff",
+      "description": "Dissociation rate constant (Koff)",
+      "unitCode": "1/s",
+      "dataType": "float"
+    },
+    {
+      "name": "ph",
+      "description": "pH of the assay",
+      "dataType": "float"
+    },
+    {
+      "name": "temp_c",
+      "description": "Temperature in Celsius",
+      "unitCode": "C",
+      "dataType": "float"
+    },
+    {
+      "name": "pubmed_id",
+      "description": "PubMed ID of the source publication",
+      "dataType": "string"
+    },
+    {
+      "name": "pubchem_cid",
+      "description": "PubChem Compound ID",
+      "dataType": "integer"
+    },
+    {
+      "name": "uniprot_id",
+      "description": "UniProt ID of the target",
+      "dataType": "string"
+    }
+  ]
+}

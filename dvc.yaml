@@ -1,0 +1,14 @@
+stages:
+  download:
+    cmd: .venv/bin/python stages/01_download.py
+    deps:
+      - stages/01_download.py
+    outs:
+      - download/data.zip
+  build:
+    cmd: .venv/bin/python stages/02_build.py
+    deps:
+      - stages/02_build.py
+      - download/data.zip
+    outs:
+      - brick/data.parquet

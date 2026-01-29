@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+download/
+brick/
+.dvc/
+.dvcignore

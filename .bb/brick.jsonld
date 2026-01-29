@@ -1,0 +1,25 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "cheminf": "http://semanticscience.org/resource/",
+    "obo": "http://purl.obolibrary.org/obo/"
+  },
+  "@type": "dcat:Dataset",
+  "name": "bindingdb-affinities",
+  "description": "BindingDB is a public, web-accessible database of measured binding affinities, focusing on the interactions of protein targets with small, drug-like molecules.",
+  "keywords": ["binding affinity", "protein-ligand", "chemistry", "drug discovery", "pharmacology"],
+  "license": "https://creativecommons.org/licenses/by/3.0/",
+  "dateCreated": "2026-01-29",
+  "version": "1.0.0",
+  "creator": {"@type": "Organization", "name": "BioBricks.ai"},
+  "distribution": [{
+    "@type": "dcat:Distribution",
+    "name": "data.parquet",
+    "contentUrl": "brick/data.parquet",
+    "encodingFormat": "application/x-parquet"
+  }],
+  "measurementTechnique": "Binding Assays",
+  "variableMeasured": ["Ki", "IC50", "Kd", "EC50"]
+}

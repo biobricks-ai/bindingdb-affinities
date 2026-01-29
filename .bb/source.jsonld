@@ -1,0 +1,10 @@
+{
+  "@context": {"@vocab": "https://schema.org/", "dcterms": "http://purl.org/dc/terms/"},
+  "@type": "DataDownload",
+  "name": "BindingDB Bulk Download",
+  "url": "https://www.bindingdb.org/rwd/bind/chemsearch/marvin/Download.jsp",
+  "dateAccessed": "2026-01-29",
+  "dcterms:source": "BindingDB",
+  "license": "https://creativecommons.org/licenses/by/3.0/",
+  "citation": "Liu, T., Lin, Y., Wen, X., Jorissen, R. N. & Gilson, M. K. BindingDB: a web-accessible database of experimentally determined protein-ligand binding affinities. Nucleic Acids Res. 35, D198-D201 (2007)."
+}

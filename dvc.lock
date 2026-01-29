@@ -1,0 +1,30 @@
+schema: '2.0'
+stages:
+  download:
+    cmd: .venv/bin/python stages/01_download.py
+    deps:
+    - path: stages/01_download.py
+      hash: md5
+      md5: b81a60d37104ec4bbf05a70dfe451321
+      size: 2461
+    outs:
+    - path: download/data.zip
+      hash: md5
+      md5: 2e7f48ec79ea04703bfd1bb77411878c
+      size: 571717360
+  build:
+    cmd: .venv/bin/python stages/02_build.py
+    deps:
+    - path: download/data.zip
+      hash: md5
+      md5: 2e7f48ec79ea04703bfd1bb77411878c
+      size: 571717360
+    - path: stages/02_build.py
+      hash: md5
+      md5: bd321e349c5633c5afd5f752bf2a1b3d
+      size: 4655
+    outs:
+    - path: brick/data.parquet
+      hash: md5
+      md5: bc83de0f47515cd165623ee5e4959b4e
+      size: 251383884
