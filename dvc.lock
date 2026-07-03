@@ -10,21 +10,21 @@ stages:
     outs:
     - path: download/data.zip
       hash: md5
-      md5: 2e7f48ec79ea04703bfd1bb77411878c
-      size: 571717360
+      md5: 48f8d28a2097ee023946e764ba93de22
+      size: 601012750
   build:
     cmd: .venv/bin/python stages/02_build.py
     deps:
     - path: download/data.zip
       hash: md5
-      md5: 2e7f48ec79ea04703bfd1bb77411878c
-      size: 571717360
+      md5: 48f8d28a2097ee023946e764ba93de22
+      size: 601012750
     - path: stages/02_build.py
       hash: md5
-      md5: bd321e349c5633c5afd5f752bf2a1b3d
-      size: 4655
+      md5: 1fc9f169e6355f0c00568990a24f59d3
+      size: 4695
     outs:
     - path: brick/data.parquet
       hash: md5
-      md5: bc83de0f47515cd165623ee5e4959b4e
-      size: 251383884
+      md5: 1390ee332c8dc0cfa313e4f8389511e7
+      size: 278467893

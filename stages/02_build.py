@@ -9,6 +9,7 @@ def process_data():
     zip_path = "download/data.zip"
     extract_dir = "download/extracted"
     os.makedirs(extract_dir, exist_ok=True)
+    os.makedirs("brick", exist_ok=True)
     
     print("Extracting zip...")
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:

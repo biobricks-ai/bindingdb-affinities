@@ -4,3 +4,4 @@ download/
 brick/
 .dvc/
 .dvcignore
+*.log
