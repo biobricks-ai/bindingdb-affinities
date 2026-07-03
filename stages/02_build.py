@@ -32,9 +32,8 @@ def process_data():
         'Ligand SMILES': 'smiles',
         'Ligand InChI': 'inchi',
         'Ligand InChI Key': 'inchikey',
-        'BindingDB Target Chain Sequence': 'target_sequence',
         'Target Name Assigned by Curator or DataSource': 'target_name',
-        'Target Name': 'target_name', 
+        'Target Name': 'target_name',
         'Ki (nM)': 'ki_nm',
         'IC50 (nM)': 'ic50_nm',
         'Kd (nM)': 'kd_nm',
@@ -45,8 +44,25 @@ def process_data():
         'Temp (C)': 'temp_c',
         'PMID': 'pubmed_id',
         'PubChem CID': 'pubchem_cid',
-        'UniProt (SwissProt) Primary ID of Target Chain': 'uniprot_id'
     }
+
+    # BindingDB target columns are per-chain-suffixed (e.g. "... Chain 1", "... Chain 2").
+    # Chain 1 is the primary target; fall back to later chains where chain 1 is null.
+    max_chains = 20
+    target_seq_cols = [f'BindingDB Target Chain Sequence {i}' for i in range(1, max_chains + 1)]
+    uniprot_cols = [f'UniProt (SwissProt) Primary ID of Target Chain {i}' for i in range(1, max_chains + 1)]
+
+    def coalesce_chains(chunk, cols):
+        result = None
+        for col in cols:
+            if col not in chunk.columns:
+                continue
+            series = chunk[col]
+            if result is None:
+                result = series.copy()
+            else:
+                result = result.fillna(series)
+        return result
 
     # Define explicit schema to avoid chunk mismatch
     fields = [
@@ -89,6 +105,14 @@ def process_data():
                 else:
                      new_df[dest_col] = new_df[dest_col].fillna(chunk[src_col])
         
+        # Chain-suffixed target columns: coalesce across chains (chain 1 = primary).
+        seq = coalesce_chains(chunk, target_seq_cols)
+        if seq is not None:
+            new_df['target_sequence'] = seq
+        uni = coalesce_chains(chunk, uniprot_cols)
+        if uni is not None:
+            new_df['uniprot_id'] = uni
+
         if 'smiles' not in new_df.columns and 'SMILES' in chunk.columns:
              new_df['smiles'] = chunk['SMILES']
                  

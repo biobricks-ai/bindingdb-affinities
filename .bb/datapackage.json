@@ -1,0 +1,106 @@
+{
+  "name": "bindingdb-affinities",
+  "title": "BindingDB curated numeric binding-affinity subset",
+  "description": "Curated numeric binding-affinity subset of BindingDB_All with ligand structures, target protein name/sequence/UniProt ID, and affinity measurements (Ki, IC50, Kd, EC50).",
+  "created": "2026-07-03T10:15:01Z",
+  "resources": [
+    {
+      "name": "data",
+      "path": "brick/data.parquet",
+      "format": "parquet",
+      "mediatype": "application/vnd.apache.parquet",
+      "rowCount": 3228448,
+      "schema": {
+        "fields": [
+          {
+            "name": "smiles",
+            "type": "string",
+            "description": "Ligand SMILES"
+          },
+          {
+            "name": "inchi",
+            "type": "string",
+            "description": "Ligand InChI"
+          },
+          {
+            "name": "inchikey",
+            "type": "string",
+            "description": "Ligand InChI Key"
+          },
+          {
+            "name": "target_sequence",
+            "type": "string",
+            "description": "Amino acid sequence of the target"
+          },
+          {
+            "name": "target_name",
+            "type": "string",
+            "description": "Name of the target protein"
+          },
+          {
+            "name": "ki_nm",
+            "type": "number",
+            "description": "Ki binding affinity",
+            "unit": "nM"
+          },
+          {
+            "name": "ic50_nm",
+            "type": "number",
+            "description": "IC50 binding affinity",
+            "unit": "nM"
+          },
+          {
+            "name": "kd_nm",
+            "type": "number",
+            "description": "Kd dissociation constant",
+            "unit": "nM"
+          },
+          {
+            "name": "ec50_nm",
+            "type": "number",
+            "description": "EC50 effective concentration",
+            "unit": "nM"
+          },
+          {
+            "name": "kon",
+            "type": "number",
+            "description": "Association rate constant (Kon)",
+            "unit": "1/Ms"
+          },
+          {
+            "name": "koff",
+            "type": "number",
+            "description": "Dissociation rate constant (Koff)",
+            "unit": "1/s"
+          },
+          {
+            "name": "ph",
+            "type": "number",
+            "description": "pH of the assay"
+          },
+          {
+            "name": "temp_c",
+            "type": "number",
+            "description": "Temperature in Celsius",
+            "unit": "C"
+          },
+          {
+            "name": "pubmed_id",
+            "type": "string",
+            "description": "PubMed ID of the source publication"
+          },
+          {
+            "name": "pubchem_cid",
+            "type": "number",
+            "description": "PubChem Compound ID"
+          },
+          {
+            "name": "uniprot_id",
+            "type": "string",
+            "description": "UniProt ID of the target"
+          }
+        ]
+      }
+    }
+  ]
+}

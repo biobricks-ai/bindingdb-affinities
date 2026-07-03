@@ -21,10 +21,10 @@ stages:
       size: 601012750
     - path: stages/02_build.py
       hash: md5
-      md5: 1fc9f169e6355f0c00568990a24f59d3
-      size: 4695
+      md5: bfcbd76e13c167e7532677ba6baadf95
+      size: 5636
     outs:
     - path: brick/data.parquet
       hash: md5
-      md5: 1390ee332c8dc0cfa313e4f8389511e7
-      size: 278467893
+      md5: 06e30683631e12f604a3a54c67a04edc
+      size: 355294596

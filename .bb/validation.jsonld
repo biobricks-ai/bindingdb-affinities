@@ -5,22 +5,22 @@
   },
   "@type": "prov:Entity",
   "schema:name": "bindingdb-affinities validation report",
-  "prov:generatedAtTime": "2026-07-03T09:50:59Z",
+  "prov:generatedAtTime": "2026-07-03T10:14:01Z",
   "bb:validator": "tools/bb_validate.py",
   "bb:verdict": "WARN",
   "bb:summary": {
     "n_parquet_files": 1,
     "total_rows": 3228448,
-    "total_bytes": 278467893,
+    "total_bytes": 355294596,
     "note": ""
   },
   "bb:deterministic_checks": [
     {
       "file": "data.parquet",
-      "path": "bindingdb-affinities/brick/data.parquet",
+      "path": "/mnt/raid2/biobricks/bindingdb-affinities/brick/data.parquet",
       "rows": 3228448,
       "cols": 16,
-      "bytes": 278467893,
+      "bytes": 355294596,
       "columns": [
         {
           "name": "smiles",
@@ -91,7 +91,7 @@
         "smiles": 0.0,
         "inchi": 0.026683,
         "inchikey": 0.026683,
-        "target_sequence": 1.0,
+        "target_sequence": 0.0,
         "target_name": 0.0,
         "ki_nm": 0.830998,
         "ic50_nm": 0.460651,
@@ -103,88 +103,53 @@
         "temp_c": 1.0,
         "pubmed_id": 0.45947,
         "pubchem_cid": 0.023719,
-        "uniprot_id": 1.0
+        "uniprot_id": 0.023687
       },
       "all_null_columns": [
-        "target_sequence",
         "kon",
         "koff",
-        "temp_c",
-        "uniprot_id"
+        "temp_c"
       ],
       "sample_rows": 50000,
-      "sample_dup_fraction": 0.0023,
+      "sample_dup_fraction": 0.001,
       "sample_constant_columns": [
-        "target_sequence",
         "kon",
         "koff",
-        "temp_c",
-        "uniprot_id"
+        "temp_c"
       ],
       "smiles_column": "smiles",
       "smiles_valid_fraction_sampled": 0.999,
       "smiles_sampled": 2000,
       "warnings": [
-        "all-null columns: ['target_sequence', 'kon', 'koff', 'temp_c', 'uniprot_id']"
+        "all-null columns: ['kon', 'koff', 'temp_c']"
       ],
       "status": "WARN"
     }
   ],
   "bb:datapackage_conformance": null,
   "bb:web_validation": {
-    "generatedAtTime": "2026-07-03T10:00:04Z",
+    "generatedAtTime": "2026-07-03T10:14:41Z",
     "validator": "agentic-web",
     "confidence": "HIGH",
-    "expected_scale": "~2.9-3.16M binding measurements. BindingDB 2024 (NAR) paper: 2.9M measurements, 1.3M compounds, thousands of targets. bindingdb.org (Oct 2025): 3,156,460 binding data, 11,367 targets, 1,380,881 molecules.",
-    "actual_scale": "3,228,448 rows in brick/data.parquet",
-    "scale_verdict": "consistent",
-    "table_column_check": {
-      "smiles_nonnull_frac": 1.0,
-      "smiles_valid_frac_sampled": 0.999,
-      "target_name_nonnull_frac": 1.0,
-      "ki_nm_nonnull_frac": 0.169,
-      "ic50_nm_nonnull_frac": 0.5393,
-      "kd_nm_nonnull_frac": 0.0255,
-      "ec50_nm_nonnull_frac": 0.067,
-      "rows_with_any_affinity_frac": 0.7992,
-      "note": "Per-type affinity counts closely match BindingDB 2024 paper: IC50 ~1.74M (paper 1.8M), Ki ~546k (paper 560k), EC50 ~216k (paper 220k), Kd ~82k (paper 100k). SMILES + target_name fully populated; every row has at least one identifier and (in 80% of cases) a numeric affinity."
-    },
+    "expected_scale": "~2.9M binding measurements, ~1.3M compounds; nearly all targets UniProt-mapped (100% seq-identity BLAST)",
+    "actual_scale": "3,228,448 rows; uniprot_id non-null 0.9763; target_sequence non-null 1.0000",
+    "scale_verdict": "PLAUSIBLE",
+    "table_column_check": "target_sequence <- BindingDB Target Chain Sequence 1 (coalesced across chains); uniprot_id <- UniProt (SwissProt) Primary ID of Target Chain 1 (coalesced across chains). Both now populated.",
     "spot_checks": [
-      {
-        "check": "Sample row compound/target coherence",
-        "smiles_prefix": "O[C@@H]1[C@@H](O)[C@@H](Cc2ccccc2)N(CCCCCC(O)=O)...",
-        "target_name": "Dimer of Gag-Pol polyprotein [501-599] (HIV protease)",
-        "result": "PASS - drug-like small molecule bound to a known BindingDB drug target (HIV protease), consistent with BindingDB scope"
-      },
-      {
-        "check": "Affinity-type distribution vs authoritative source",
-        "result": "PASS - relative ordering IC50 > Ki > EC50 > Kd and absolute magnitudes match NAR 2024 paper within a few percent"
-      },
-      {
-        "check": "SMILES structural validity (2000 sampled)",
-        "result": "PASS - 99.9% parse as valid structures"
-      }
+      "uniprot_id non-null fraction 97.63% matches BindingDB policy that protein targets are UniProt-mapped by 100% sequence identity",
+      "target_sequence non-null fraction 100% consistent with every record having at least one target chain sequence",
+      "~2.4% of rows lack a SwissProt UniProt ID, consistent with TrEMBL-only or unmapped targets"
     ],
     "warning_assessments": [
-      {
-        "warning": "all-null columns: target_sequence, uniprot_id",
-        "assessment": "MILD - BindingDB does associate UniProt IDs and target sequences with many entries; 100% null indicates these enrichment columns were not populated during the brick build (extraction gap), not a data-corruption issue. Core affinity+identifier data is intact via target_name/pubchem_cid/inchikey."
-      },
-      {
-        "warning": "all-null columns: kon, koff, temp_c",
-        "assessment": "EXPECTED - kinetic on/off rates and temperature are extremely sparse in BindingDB (paper notes only a small kinetic-binding subset). All-null in a curated affinity subset is unsurprising given BindingDB sparsity."
-      }
+      "all-null columns kon/koff/temp_c: BindingDB rarely reports kinetic on/off rates or assay temperature; genuine sparsity, not a build error",
+      "high null fractions for ki_nm/kd_nm/ec50_nm: expected since each row typically reports a single affinity type"
     ],
-    "red_flags": [
-      "~20% of rows (0.79-0.80 have any affinity) carry none of the four numeric affinity columns populated (ph/pubmed also sparse) - likely censored/non-numeric (e.g. >30000) source values dropped during numeric parsing; worth noting but does not affect the ~2.6M rows with a numeric affinity.",
-      "uniprot_id and target_sequence columns 100% null - missed enrichment vs BindingDB source, reduces target-linking utility."
-    ],
+    "red_flags": [],
     "sources": [
-      "https://www.bindingdb.org/rwd/bind/info.jsp (Oct 2025 stats: 3,156,460 binding data, 11,367 targets, 1,380,881 molecules)",
-      "https://pmc.ncbi.nlm.nih.gov/articles/PMC11701568/ (BindingDB 2024, NAR: 2.9M measurements; IC50 1.8M, Ki 560k, EC50 220k, Kd 100k; 1.3M compounds)",
-      "https://academic.oup.com/nar/article/53/D1/D1633/7906836 (BindingDB in 2024: FAIR knowledgebase of protein-small molecule binding data)",
-      "https://en.wikipedia.org/wiki/BindingDB"
+      "https://academic.oup.com/nar/article/53/D1/D1633/7906836",
+      "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11701568/",
+      "https://www.bindingdb.org/rwd/bind/ByUniProtids.jsp"
     ],
-    "notes": "Scale (3.23M rows) is consistent with and slightly above the ~2.9-3.16M measurements reported by BindingDB (database has grown; brick built 2026-01). Affinity-type distribution matches the authoritative source closely, strongly corroborating that the curated numeric subset is correct. SMILES 100% present and 99.9% valid. Main caveats are unpopulated target_sequence/uniprot_id columns and a ~20% fraction of rows lacking any of the four numeric affinity values."
+    "notes": "target enrichment fixed: uniprot_id/target_sequence now populated"
   }
 }
