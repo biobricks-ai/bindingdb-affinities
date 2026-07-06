@@ -5,22 +5,22 @@
   },
   "@type": "prov:Entity",
   "schema:name": "bindingdb-affinities validation report",
-  "prov:generatedAtTime": "2026-07-03T10:14:01Z",
+  "prov:generatedAtTime": "2026-07-06T08:38:42Z",
   "bb:validator": "tools/bb_validate.py",
   "bb:verdict": "WARN",
   "bb:summary": {
     "n_parquet_files": 1,
     "total_rows": 3228448,
-    "total_bytes": 355294596,
+    "total_bytes": 356674913,
     "note": ""
   },
   "bb:deterministic_checks": [
     {
       "file": "data.parquet",
-      "path": "/mnt/raid2/biobricks/bindingdb-affinities/brick/data.parquet",
+      "path": "bindingdb-affinities/brick/data.parquet",
       "rows": 3228448,
-      "cols": 16,
-      "bytes": 355294596,
+      "cols": 21,
+      "bytes": 356674913,
       "columns": [
         {
           "name": "smiles",
@@ -59,6 +59,22 @@
           "type": "double"
         },
         {
+          "name": "ki_relation",
+          "type": "string"
+        },
+        {
+          "name": "ic50_relation",
+          "type": "string"
+        },
+        {
+          "name": "kd_relation",
+          "type": "string"
+        },
+        {
+          "name": "ec50_relation",
+          "type": "string"
+        },
+        {
           "name": "kon",
           "type": "double"
         },
@@ -85,6 +101,10 @@
         {
           "name": "uniprot_id",
           "type": "string"
+        },
+        {
+          "name": "has_affinity",
+          "type": "bool"
         }
       ],
       "null_fraction": {
@@ -93,17 +113,22 @@
         "inchikey": 0.026683,
         "target_sequence": 0.0,
         "target_name": 0.0,
-        "ki_nm": 0.830998,
-        "ic50_nm": 0.460651,
-        "kd_nm": 0.974504,
-        "ec50_nm": 0.933042,
+        "ki_nm": 0.805849,
+        "ic50_nm": 0.317139,
+        "kd_nm": 0.959711,
+        "ec50_nm": 0.916405,
+        "ki_relation": 0.805849,
+        "ic50_relation": 0.317139,
+        "kd_relation": 0.959711,
+        "ec50_relation": 0.916405,
         "kon": 1.0,
         "koff": 1.0,
         "ph": 0.933899,
         "temp_c": 1.0,
         "pubmed_id": 0.45947,
         "pubchem_cid": 0.023719,
-        "uniprot_id": 0.023687
+        "uniprot_id": 0.023687,
+        "has_affinity": 0.0
       },
       "all_null_columns": [
         "kon",
@@ -126,10 +151,14 @@
       "status": "WARN"
     }
   ],
-  "bb:datapackage_conformance": null,
+  "bb:datapackage_conformance": {
+    "issues": [],
+    "conforms": true
+  },
   "bb:web_validation": {
     "generatedAtTime": "2026-07-03T10:14:41Z",
     "validator": "agentic-web",
+    "checked": "2026-07-06",
     "confidence": "HIGH",
     "expected_scale": "~2.9M binding measurements, ~1.3M compounds; nearly all targets UniProt-mapped (100% seq-identity BLAST)",
     "actual_scale": "3,228,448 rows; uniprot_id non-null 0.9763; target_sequence non-null 1.0000",
@@ -144,12 +173,22 @@
       "all-null columns kon/koff/temp_c: BindingDB rarely reports kinetic on/off rates or assay temperature; genuine sparsity, not a build error",
       "high null fractions for ki_nm/kd_nm/ec50_nm: expected since each row typically reports a single affinity type"
     ],
+    "value_less_rows_finding": {
+      "status": "RESOLVED_RECOVERED",
+      "before": "648,298 rows (20.08%) had all of Ki/Kd/IC50/EC50 null",
+      "after": "2,943 rows (0.09%) genuinely value-less",
+      "root_cause": "stages/02_build.py coerced affinity columns with pd.to_numeric(errors='coerce'), which silently nulled BindingDB's censored values (e.g. '>100000', '<0.03'). Only '<' and '>' qualifiers occur; all strip cleanly to a float.",
+      "fix": "parse_affinity() now splits each affinity cell into a numeric magnitude (ki_nm/ic50_nm/kd_nm/ec50_nm) plus a relation qualifier ('='/'<'/'>') stored in new columns ki_relation/ic50_relation/kd_relation/ec50_relation. This recovers 645,355 previously-dropped measurements without losing the censoring direction.",
+      "recovered": 645355,
+      "genuine_value_less": 2943,
+      "decision": "kept + flagged via new boolean has_affinity column (False for the 2,943 genuinely value-less rows); no rows dropped. relation qualifier distribution across all measures: '=' exact majority, '>' ~lower-bound/inactive, '<' ~upper-bound/potent."
+    },
     "red_flags": [],
     "sources": [
       "https://academic.oup.com/nar/article/53/D1/D1633/7906836",
       "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11701568/",
       "https://www.bindingdb.org/rwd/bind/ByUniProtids.jsp"
     ],
-    "notes": "target enrichment fixed: uniprot_id/target_sequence now populated"
+    "notes": "target enrichment fixed: uniprot_id/target_sequence now populated. value-less rows resolved: censored affinity values recovered via magnitude+relation split; 645,355 recovered, 2,943 genuine value-less kept and flagged with has_affinity=False."
   }
 }

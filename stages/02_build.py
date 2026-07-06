@@ -75,16 +75,44 @@ def process_data():
         pa.field('ic50_nm', pa.float64()),
         pa.field('kd_nm', pa.float64()),
         pa.field('ec50_nm', pa.float64()),
+        # Relation/qualifier for each affinity: '=', '<' (upper bound / more potent),
+        # or '>' (lower bound / less potent). BindingDB stores many values as censored
+        # (e.g. ">100000", "<0.03"); we keep the magnitude in *_nm and the direction here.
+        pa.field('ki_relation', pa.string()),
+        pa.field('ic50_relation', pa.string()),
+        pa.field('kd_relation', pa.string()),
+        pa.field('ec50_relation', pa.string()),
         pa.field('kon', pa.float64()),
         pa.field('koff', pa.float64()),
         pa.field('ph', pa.float64()),
         pa.field('temp_c', pa.float64()),
         pa.field('pubmed_id', pa.string()),
         pa.field('pubchem_cid', pa.float64()),
-        pa.field('uniprot_id', pa.string())
+        pa.field('uniprot_id', pa.string()),
+        # True when at least one of Ki/Kd/IC50/EC50 has a value (censored or exact).
+        pa.field('has_affinity', pa.bool_()),
     ]
     explicit_schema = pa.schema(fields)
     desired_columns = [f.name for f in fields]
+
+    import re
+    _qual_re = re.compile(r'^\s*([<>]=?|~)?\s*(-?\d+\.?\d*(?:[eE][-+]?\d+)?)\s*$')
+
+    def parse_affinity(series):
+        """Split a BindingDB affinity string column into (magnitude float, relation str).
+
+        Handles censored values like ">100000" and "<0.03" that would otherwise be
+        dropped by a plain numeric coercion. Returns (values, relations) Series.
+        Relation is '=' for exact values, '<'/'>' for bounds, None when no value.
+        """
+        s = series.astype(str).str.strip()
+        m = s.str.extract(_qual_re)
+        rel = m[0].where(m[1].notna())
+        rel = rel.fillna('=')
+        rel = rel.where(m[1].notna())  # keep None where there was no number
+        val = pd.to_numeric(m[1], errors='coerce')
+        rel = rel.where(val.notna())
+        return val, rel
 
     try:
         df_iter = pd.read_csv(tsv_path, sep='\t', chunksize=chunksize, on_bad_lines='skip', encoding='utf-8', low_memory=False)
@@ -116,18 +144,36 @@ def process_data():
         if 'smiles' not in new_df.columns and 'SMILES' in chunk.columns:
              new_df['smiles'] = chunk['SMILES']
                  
+        # Parse affinity columns, preserving censored ("<"/">") values as
+        # magnitude + relation instead of dropping them via numeric coercion.
+        affinity_map = {'ki_nm': 'ki_relation', 'ic50_nm': 'ic50_relation',
+                        'kd_nm': 'kd_relation', 'ec50_nm': 'ec50_relation'}
+        for val_col, rel_col in affinity_map.items():
+            if val_col in new_df.columns:
+                v, r = parse_affinity(new_df[val_col])
+                new_df[val_col] = v
+                new_df[rel_col] = r
+            else:
+                new_df[val_col] = None
+                new_df[rel_col] = None
+
         for col in desired_columns:
             if col not in new_df.columns:
                 new_df[col] = None
-        
+
         new_df = new_df[desired_columns]
-        
+
         # Coerce types for pandas to avoid Pyarrow conversion errors
-        numeric_cols = ['ki_nm', 'ic50_nm', 'kd_nm', 'ec50_nm', 'kon', 'koff', 'ph', 'temp_c', 'pubchem_cid']
+        numeric_cols = ['kon', 'koff', 'ph', 'temp_c', 'pubchem_cid']
         for c in numeric_cols:
             new_df[c] = pd.to_numeric(new_df[c], errors='coerce')
-            
-        string_cols = ['smiles', 'inchi', 'inchikey', 'target_sequence', 'target_name', 'pubmed_id', 'uniprot_id']
+
+        # has_affinity: True when any of the four measures has a value.
+        new_df['has_affinity'] = new_df[['ki_nm', 'ic50_nm', 'kd_nm', 'ec50_nm']].notna().any(axis=1)
+
+        string_cols = ['smiles', 'inchi', 'inchikey', 'target_sequence', 'target_name',
+                       'pubmed_id', 'uniprot_id', 'ki_relation', 'ic50_relation',
+                       'kd_relation', 'ec50_relation']
         for c in string_cols:
             new_df[c] = new_df[c].astype(str).replace({'nan': None, 'None': None})
 

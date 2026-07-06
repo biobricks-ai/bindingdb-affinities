@@ -36,29 +36,49 @@
     },
     {
       "name": "ki_nm",
-      "description": "Ki binding affinity",
+      "description": "Ki binding affinity magnitude (censored values parsed; sign in ki_relation)",
       "unitCode": "nM",
       "dataType": "float"
     },
     {
       "name": "ic50_nm",
       "@type": "obo:OBI_0001173",
-      "description": "IC50 binding affinity",
+      "description": "IC50 binding affinity magnitude (censored values parsed; sign in ic50_relation)",
       "unitCode": "nM",
       "dataType": "float"
     },
     {
       "name": "kd_nm",
-      "description": "Kd dissociation constant",
+      "description": "Kd dissociation constant magnitude (censored values parsed; sign in kd_relation)",
       "unitCode": "nM",
       "dataType": "float"
     },
     {
       "name": "ec50_nm",
       "@type": "obo:OBI_0001174",
-      "description": "EC50 effective concentration",
+      "description": "EC50 effective concentration magnitude (censored values parsed; sign in ec50_relation)",
       "unitCode": "nM",
       "dataType": "float"
+    },
+    {
+      "name": "ki_relation",
+      "description": "Qualifier for ki_nm: '=' exact, '<' upper bound (more potent), '>' lower bound (less potent), null when no Ki",
+      "dataType": "string"
+    },
+    {
+      "name": "ic50_relation",
+      "description": "Qualifier for ic50_nm: '=' exact, '<' upper bound, '>' lower bound, null when no IC50",
+      "dataType": "string"
+    },
+    {
+      "name": "kd_relation",
+      "description": "Qualifier for kd_nm: '=' exact, '<' upper bound, '>' lower bound, null when no Kd",
+      "dataType": "string"
+    },
+    {
+      "name": "ec50_relation",
+      "description": "Qualifier for ec50_nm: '=' exact, '<' upper bound, '>' lower bound, null when no EC50",
+      "dataType": "string"
     },
     {
       "name": "kon",
@@ -97,6 +117,11 @@
       "name": "uniprot_id",
       "description": "UniProt ID of the target",
       "dataType": "string"
+    },
+    {
+      "name": "has_affinity",
+      "description": "True when at least one of Ki/Kd/IC50/EC50 has a value (censored or exact); False for the ~0.09% of rows genuinely lacking any affinity in BindingDB",
+      "dataType": "boolean"
     }
   ]
 }

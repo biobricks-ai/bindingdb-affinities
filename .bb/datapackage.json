@@ -1,103 +1,93 @@
 {
-  "name": "bindingdb-affinities",
-  "title": "BindingDB curated numeric binding-affinity subset",
-  "description": "Curated numeric binding-affinity subset of BindingDB_All with ligand structures, target protein name/sequence/UniProt ID, and affinity measurements (Ki, IC50, Kd, EC50).",
-  "created": "2026-07-03T10:15:01Z",
-  "resources": [
+  "@context": "http://www.w3.org/ns/csvw",
+  "tables": [
     {
-      "name": "data",
-      "path": "brick/data.parquet",
-      "format": "parquet",
-      "mediatype": "application/vnd.apache.parquet",
-      "rowCount": 3228448,
-      "schema": {
-        "fields": [
+      "url": "brick/data.parquet",
+      "tableSchema": {
+        "columns": [
           {
             "name": "smiles",
-            "type": "string",
-            "description": "Ligand SMILES"
+            "datatype": "string"
           },
           {
             "name": "inchi",
-            "type": "string",
-            "description": "Ligand InChI"
+            "datatype": "string"
           },
           {
             "name": "inchikey",
-            "type": "string",
-            "description": "Ligand InChI Key"
+            "datatype": "string"
           },
           {
             "name": "target_sequence",
-            "type": "string",
-            "description": "Amino acid sequence of the target"
+            "datatype": "string"
           },
           {
             "name": "target_name",
-            "type": "string",
-            "description": "Name of the target protein"
+            "datatype": "string"
           },
           {
             "name": "ki_nm",
-            "type": "number",
-            "description": "Ki binding affinity",
-            "unit": "nM"
+            "datatype": "number"
           },
           {
             "name": "ic50_nm",
-            "type": "number",
-            "description": "IC50 binding affinity",
-            "unit": "nM"
+            "datatype": "number"
           },
           {
             "name": "kd_nm",
-            "type": "number",
-            "description": "Kd dissociation constant",
-            "unit": "nM"
+            "datatype": "number"
           },
           {
             "name": "ec50_nm",
-            "type": "number",
-            "description": "EC50 effective concentration",
-            "unit": "nM"
+            "datatype": "number"
+          },
+          {
+            "name": "ki_relation",
+            "datatype": "string"
+          },
+          {
+            "name": "ic50_relation",
+            "datatype": "string"
+          },
+          {
+            "name": "kd_relation",
+            "datatype": "string"
+          },
+          {
+            "name": "ec50_relation",
+            "datatype": "string"
           },
           {
             "name": "kon",
-            "type": "number",
-            "description": "Association rate constant (Kon)",
-            "unit": "1/Ms"
+            "datatype": "number"
           },
           {
             "name": "koff",
-            "type": "number",
-            "description": "Dissociation rate constant (Koff)",
-            "unit": "1/s"
+            "datatype": "number"
           },
           {
             "name": "ph",
-            "type": "number",
-            "description": "pH of the assay"
+            "datatype": "number"
           },
           {
             "name": "temp_c",
-            "type": "number",
-            "description": "Temperature in Celsius",
-            "unit": "C"
+            "datatype": "number"
           },
           {
             "name": "pubmed_id",
-            "type": "string",
-            "description": "PubMed ID of the source publication"
+            "datatype": "string"
           },
           {
             "name": "pubchem_cid",
-            "type": "number",
-            "description": "PubChem Compound ID"
+            "datatype": "number"
           },
           {
             "name": "uniprot_id",
-            "type": "string",
-            "description": "UniProt ID of the target"
+            "datatype": "string"
+          },
+          {
+            "name": "has_affinity",
+            "datatype": "boolean"
           }
         ]
       }
