@@ -5,22 +5,22 @@
   },
   "@type": "prov:Entity",
   "schema:name": "bindingdb-affinities validation report",
-  "prov:generatedAtTime": "2026-07-06T08:38:42Z",
+  "prov:generatedAtTime": "2026-07-15T17:36:45Z",
   "bb:validator": "tools/bb_validate.py",
-  "bb:verdict": "WARN",
+  "bb:verdict": "PASS",
   "bb:summary": {
     "n_parquet_files": 1,
     "total_rows": 3228448,
-    "total_bytes": 356674913,
+    "total_bytes": 356714189,
     "note": ""
   },
   "bb:deterministic_checks": [
     {
       "file": "data.parquet",
-      "path": "bindingdb-affinities/brick/data.parquet",
+      "path": "/mnt/raid2/biobricks/bindingdb-affinities/brick/data.parquet",
       "rows": 3228448,
       "cols": 21,
-      "bytes": 356674913,
+      "bytes": 356714189,
       "columns": [
         {
           "name": "smiles",
@@ -121,34 +121,24 @@
         "ic50_relation": 0.317139,
         "kd_relation": 0.959711,
         "ec50_relation": 0.916405,
-        "kon": 1.0,
-        "koff": 1.0,
+        "kon": 0.99969,
+        "koff": 0.999698,
         "ph": 0.933899,
-        "temp_c": 1.0,
+        "temp_c": 0.938508,
         "pubmed_id": 0.45947,
         "pubchem_cid": 0.023719,
         "uniprot_id": 0.023687,
         "has_affinity": 0.0
       },
-      "all_null_columns": [
-        "kon",
-        "koff",
-        "temp_c"
-      ],
+      "all_null_columns": [],
       "sample_rows": 50000,
       "sample_dup_fraction": 0.001,
       "sample_constant_columns": [
         "kon",
-        "koff",
-        "temp_c"
+        "koff"
       ],
-      "smiles_column": "smiles",
-      "smiles_valid_fraction_sampled": 0.999,
-      "smiles_sampled": 2000,
-      "warnings": [
-        "all-null columns: ['kon', 'koff', 'temp_c']"
-      ],
-      "status": "WARN"
+      "warnings": [],
+      "status": "PASS"
     }
   ],
   "bb:datapackage_conformance": {

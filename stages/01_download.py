@@ -42,7 +42,8 @@ def download_file():
     # Prefer BindingDB_All...tsv.zip
     # Filter out 2D, 3D if possible, though TSV usually doesn't have 2D/3D distinction in name (SDF does)
     # But sometimes they do: BindingDB_All_2D_...tsv.zip? No, usually SDF.
-    # The list showed: BindingDB_All_202601_tsv.zip
+    # Auto-selects the current monthly BindingDB_All TSV dump.
+    # As of 2026-07: BindingDB_All_202607_tsv.zip (June 2026 data).
     
     for c in candidates:
         if 'BindingDB_All' in c and 'tsv.zip' in c and 'Articles' not in c and 'ChEMBL' not in c and 'Patents' not in c:

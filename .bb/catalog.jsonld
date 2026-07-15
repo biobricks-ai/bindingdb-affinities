@@ -1,0 +1,30 @@
+{
+  "@context": {
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "prov": "http://www.w3.org/ns/prov#",
+    "schema": "https://schema.org/",
+    "bb": "https://brickyard.biobricks.ai/ns#",
+    "csvw": "http://www.w3.org/ns/csvw#"
+  },
+  "@type": "dcat:Catalog",
+  "@id": "https://brickyard.biobricks.ai/brick/bindingdb-affinities",
+  "dcterms:title": "bindingdb-affinities catalog",
+  "dcterms:description": "Aggregator brick modeled as a DCAT Catalog: 1 datasets (1 distributions / 3,228,448 rows). Each dcat:Dataset is a source record with its own manifest at brick/<record>/dataset.jsonld and one dcat:Distribution per parquet table.",
+  "prov:generatedAtTime": "2026-07-06T00:00:00Z",
+  "bb:generator": "tools/bb_catalog_manifest.py",
+  "bb:n_datasets": 1,
+  "bb:n_distributions": 1,
+  "bb:n_rows": 3228448,
+  "dcat:dataset": [
+    {
+      "@type": "dcat:Dataset",
+      "@id": "urn:bb:bindingdb-affinities:data",
+      "dcterms:identifier": "data",
+      "dcterms:title": "data",
+      "bb:n_tables": 1,
+      "bb:n_rows": 3228448,
+      "bb:manifest": "brick/data.dataset.jsonld"
+    }
+  ]
+}

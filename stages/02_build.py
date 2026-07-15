@@ -38,6 +38,9 @@ def process_data():
         'IC50 (nM)': 'ic50_nm',
         'Kd (nM)': 'kd_nm',
         'EC50 (nM)': 'ec50_nm',
+        # BindingDB uses these exact kinetic-rate headers; keep legacy keys as fallbacks.
+        'kon (M-1-s-1)': 'kon',
+        'koff (s-1)': 'koff',
         'kon (1/Ms)': 'kon',
         'koff (1/s)': 'koff',
         'pH': 'ph',
@@ -162,6 +165,12 @@ def process_data():
                 new_df[col] = None
 
         new_df = new_df[desired_columns]
+
+        # Temperature values carry a unit suffix (e.g. "37.00 C"); pull the leading
+        # numeric magnitude so plain numeric coercion doesn't silently null them.
+        if 'temp_c' in new_df.columns:
+            new_df['temp_c'] = new_df['temp_c'].astype(str).str.extract(
+                r'(-?\d+\.?\d*)', expand=False)
 
         # Coerce types for pandas to avoid Pyarrow conversion errors
         numeric_cols = ['kon', 'koff', 'ph', 'temp_c', 'pubchem_cid']
